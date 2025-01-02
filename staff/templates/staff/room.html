@@ -11,19 +11,33 @@
         <div id="queue_list" style="display: flex; gap:10px; flex-direction: column;">
             {% for room in rooms %}
             <div
-                style="padding: 15px; border-radius: 12px; background-color: aliceblue; width: fit-content;">
-                {{room.user.username}}
-                {{room.issue.description}}
-                <div>Queue Number: {{ room.queue_number }}</div>
+                style="display: flex; align-items: center; padding: 15px; border-radius: 12px; background-color: aliceblue; width: fit-content;">
+                <div>
+                    {{room.user.username}}
+                    {{room.issue.description}}
+                    <div>Queue Number: {{ room.queue_number }}</div>
+                </div>
+                
+                <form action="{% url 'staff_delete_customer' code=Room.code pk=room.id %}">
+                    <button type="submit">
+
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </form>
             </div>
             {% endfor %}
+
         </div>
     
     </div>
     <div  ws-connect="/ws/chat/{{Room.code}}/">
 
         <div id="count">{{Room.current_serving_queue_number}}</div>
-        <button>Add customer</button>
+
+        <form action="{% url 'staff_create_customer' code=Room.code %}">
+
+            <button type="submit" >Add customer</button>
+        </form>
 
         <form ws-send>
             <input type="hidden" name="hehe" value="hehe">
