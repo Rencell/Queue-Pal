@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div hx-ext="ws">
+    
+    <div ws-connect="/ws/staff_room/">
+        
+
+        
+        <div id="queue_list" style="display: flex; gap:10px; flex-direction: column;">
+            {% for room in rooms %}
+            <div
+                style="padding: 15px; border-radius: 12px; background-color: aliceblue; width: fit-content;">
+                {{room.user.username}}
+                {{room.issue.description}}
+                <div>Queue Number: {{ room.queue_number }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    
+    </div>
+    <div  ws-connect="/ws/chat/{{Room.code}}/">
+
+        <div id="count">{{Room.current_serving_queue_number}}</div>
+        <button>Add customer</button>
+
+        <form ws-send>
+            <input type="hidden" name="hehe" value="hehe">
+            <button type="submit">Next -></button>
+
+        </form>
+    </div>
+</div>
+{% endblock content %}

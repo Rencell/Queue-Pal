@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    
+   Hello {{ request.user.username }}
+
+   
+   {% if available %}
+
+      <div>Go to queue</div>
+
+      <a href="{% url 'staff_queue_room' code=available.code %}">Next -></a>
+   {% else %}
+      <form action="{% url 'staff_index' %}" method="post">
+         {% csrf_token %}
+         <button type="submit">Start a session?</button>
+      </form>
+
+   {% endif %}
+      
+
+   <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+   </form>
+{% endblock content %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    
+    hello
+    {{user.username}}
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Cancel Queue">
+    </form>
+    <div>Current serving:</div>
+
+    <div hx-ext="ws" ws-connect="/ws/chat/{{room_code}}/">
+
+        <div id="count">{{current_serving}}</div>
+    </div>
+
+    <div>Your queue number:</div>
+    <div>{{room.queue_number}}</div>
+
+    
+    <!-- {% for queue in queues %}
+        {{queue.queue_number}}
+    {% endfor %}
+         -->
+{% endblock content %}
