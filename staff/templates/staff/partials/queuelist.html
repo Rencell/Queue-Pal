@@ -1,2 +1,20 @@
-<div hx-swap-oob='beforeend:#queue_list'><div style='padding: 15px; border-radius: 12px; background-color: aliceblue; width: fit-content;'>{{ room.user.username}} {{ room.issue.description}}<div>Queue Number: {{ room.queue_number }}</div></div></div>
+<div hx-swap-oob='beforeend:#queue_list'>
+    <div class="{% if room.user %} bg-warning
+                {% else %}  bg-info {% endif %} 
+                text-black" 
+        style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 12px;">
+        <div>
+            {{room.user.username}} {{ room.issue.description}}
+            <div>Queue Number: {{room.queue_number }}</div>
+        </div>
+    
 
+        <form action='{% url "staff_delete_customer" code=room.room.code pk=room.id %}'>
+            <button type='submit'>
+
+                <i class='bi bi-trash3-fill'></i>
+            </button>
+        </form>
+
+    </div>
+</div>

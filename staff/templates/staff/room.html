@@ -1,49 +1,74 @@
-{% extends 'base.html' %}
+{% extends 'staff/layout/staff_base.html' %}
 
-{% block content %}
+{% block staff_content %}
 
-<div hx-ext="ws">
-    
-    <div ws-connect="/ws/staff_room/">
-        
-
-        
-        <div id="queue_list" style="display: flex; gap:10px; flex-direction: column;">
-            {% for room in rooms %}
-            <div
-                style="display: flex; align-items: center; padding: 15px; border-radius: 12px; background-color: aliceblue; width: fit-content;">
-                <div>
-                    {{room.user.username}}
-                    {{room.issue.description}}
-                    <div>Queue Number: {{ room.queue_number }}</div>
-                </div>
-                
-                <form action="{% url 'staff_delete_customer' code=Room.code pk=room.id %}">
-                    <button type="submit">
-
-                        <i class="bi bi-trash3-fill"></i>
-                    </button>
-                </form>
-            </div>
-            {% endfor %}
-
-        </div>
-    
-    </div>
-    <div  ws-connect="/ws/chat/{{Room.code}}/">
-
-        <div id="count">{{Room.current_serving_queue_number}}</div>
+<div role="alert" class="alert alert-info">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      class="h-6 w-6 shrink-0 stroke-current">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span>New software update available.</span>
+  </div>
+<div class="place-items-center flex flex-col justify-center gap-4 grow" hx-ext="ws"
+    ws-connect="/ws/chat/{{Room.code}}/">
+    <div class="text-9xl" id="count">{{Room.current_serving_queue_number}}</div>
+   
+    <div class="flex gap-2">
 
         <form action="{% url 'staff_create_customer' code=Room.code %}">
 
-            <button type="submit" >Add customer</button>
+            <button class="btn" type="submit">Add customer</button>
         </form>
 
         <form ws-send>
             <input type="hidden" name="hehe" value="hehe">
-            <button type="submit">Next -></button>
+            <button class="btn btn-warning" type="submit">Next -></button>
 
         </form>
     </div>
 </div>
-{% endblock content %}
+{% endblock staff_content %}
+
+<!-- ------------------------------------------------------------------ -->
+
+{% block side_content %}
+<div hx-ext="ws" ws-connect="/ws/staff_room/" class="w-full p-2">
+    <div id="queue_list"
+        style="display: flex; gap:10px; flex-direction: column;">
+        {% for room in rooms %}
+        <div class="{% if room.user %} bg-warning
+                    {% else %}  bg-info {% endif %} 
+                    text-black"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 12px;">
+            <div>
+                {% if room.user %}{{room.user.username}}
+                {% else %}
+                Anonymous
+                {% endif %}
+
+                {{room.issue.description}}
+                <div>Queue Number: {{ room.queue_number }}</div>
+            </div>
+
+            <form
+                action="{% url 'staff_delete_customer' code=Room.code pk=room.id %}">
+                <button type="submit"
+                    class="p-2 shadow rounded-lg bg-slate-300">
+
+                    <i class="bi bi-trash3-fill text-red-500"></i>
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock side_content %}

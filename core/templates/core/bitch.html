@@ -3,22 +3,24 @@
 
 
 {% block content %}
-    
-   
-   Enter code:
-   <form action="{% url 'core_index' %}" method="post">
-      {% csrf_token %}
-      <input type="text" name="user_room" placeholder="Please input code...">
-      <button type="submit">Enter</button>
-   </form>
-   
-   {% for message in messages %}
-      {{message}}
-   {% endfor %}
-      
-
-   <form action="{% url 'logout' %}" method="post">
-      {% csrf_token %}
-      <button type="submit">Logout</button>
-   </form>
-{% endblock content %}
+<div class="p-4">
+       
+      <form class="flex justify-end" action="{% url 'logout' %}" method="post">
+         {% csrf_token %}
+         <button type="submit" class="btn btn-sm btn-warning">Logout</button>
+      </form>
+      <div class="flex flex-col justify-center items-center h-screen gap-3">
+         <div>Please input the code that is served by the staff</div>
+         <form class="flex flex-col gap-3 w-80" action="{% url 'core_index' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="user_room" placeholder="Please input code..." class="input input-bordered w-full max-w-xs">
+            <button type="submit" class="btn btn-warning">Enter</button>
+         </form>
+         
+         {% for message in messages %}
+            {{message}}
+         {% endfor %}
+            
+      </div>
+   </div>
+   {% endblock content %}

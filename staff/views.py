@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin # type: ignore
 from django.urls import reverse_lazy
 from core.models import Room, UserRoom, RoomStatus
-
+from datetime import date
 
 class user_index(GroupRequiredMixin, TemplateView):
     
@@ -26,9 +26,9 @@ class user_index(GroupRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        
+        today = date.today()
         try:
-            check_room = Room.objects.get(staff=self.request.user)
+            check_room = Room.objects.get(staff=self.request.user, created_at__date=today)
         except Room.DoesNotExist:
             check_room = Room.objects.none()
 

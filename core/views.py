@@ -39,13 +39,10 @@ class issue_view(LoginRequiredMixin, TemplateView):
             issue = Issue.objects.create(description=user_issue)
             room = Room.objects.get(code=room_code)
             if room:
-                roomcount = UserRoom.objects.filter(room=room).count()
-                roomcount += 1
                 userroom, created = UserRoom.objects.get_or_create(
                     user=request.user,
                     room=room,
-                    issue=issue,
-                    queue_number=roomcount
+                    issue=issue
                 )
                 if created:
                     request.session['userroom'] = userroom.id

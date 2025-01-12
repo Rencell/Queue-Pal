@@ -14,8 +14,7 @@ def send_signal(sender, instance, created, **kwargs):
         message_html = get_template('staff/partials/queuelist.html').render(
             context={'room':instance}
         )
-        message_html = message_html.strip()
-        # message_html = "<div hx-swap-oob='outerHTML:#queue_list'> hello </div>"
+        message_html = message_html.replace('\n', '').replace('\r', '')
         room = "staff_room"
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
