@@ -9,6 +9,26 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.tailwindcss.com"></script>
     <title>Queue{% block title %}-app{% endblock title %}</title>
+
+    <style>
+        .circle-cut {
+            --r: 12px; /* cut size */
+            height: 90px;
+            aspect-ratio: 1.7;
+            border-radius: 12px;
+            mask: radial-gradient(var(--r) at var(--r),#0000 calc(100% - 1px),#000) calc(-1*var(--r));
+        }
+
+        /* HTML: <div class="rounded-edge"></div> */
+        .rounded-edge {
+            height: 200px;
+            aspect-ratio: 3/2;
+            /* update the 85% to control the curvature
+            you can also update the 50% to control the position
+            */
+            clip-path: ellipse(85% 100% at 50% 0%);
+        }
+    </style>
 </head>
 <body>
     
