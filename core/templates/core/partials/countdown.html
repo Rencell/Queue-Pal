@@ -1,0 +1,40 @@
+<div id='timer' hx-swap-oob='true'>
+  <div x-data='countdown(59)'>
+      <div
+          class='radial-progress text-error place-items-center'
+          :style='`--value:${((counter / 60) * 100)}; --size:15rem; --thickness: 1rem;`'
+          role='progressbar'>
+          <div class='text-sm text-base-content'>It is your Queue</div>
+              <div class='text-xl font-semibold text-warning'>
+                  <div>Please go to</div>
+                  <div>the counter</div>
+              </div>
+      </div>
+  </div>
+  
+  <script>
+      function countdown(initialValue) {
+        return {
+  
+          counter: parseInt(localStorage.getItem('counter')) || initialValue
+          ,
+          init() {
+            this.startCountdown();
+          },
+          startCountdown() {
+            const interval = setInterval(() => {
+              
+              if (this.counter > 0) {
+                this.counter--;
+                localStorage.setItem('counter', this.counter);
+              } else {
+                clearInterval(interval);
+                alert('Countdown completed!');
+                localStorage.removeItem('counter')
+              }
+            }, 1000);
+          }
+        };
+      }
+  </script>
+</div>

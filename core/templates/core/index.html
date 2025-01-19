@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+<div class="p-4">
+       
+      <form class="flex justify-end" action="{% url 'logout' %}" method="post">
+         {% csrf_token %}
+         <button type="submit" class="btn btn-sm btn-warning">Logout</button>
+      </form>
+      <div class="flex flex-col justify-center items-center h-screen gap-3">
+         
+         
+         {% if not isSession %}
+            <div>Please input the code that is served by the staff</div>
+            
+            <form class="flex flex-col gap-3 w-80" action="{% url 'core_index' %}" method="post">
+               {% csrf_token %}
+               <input type="text" name="user_room" placeholder="Please input code..." class="input input-bordered w-full max-w-xs">
+               <button type="submit" class="btn btn-warning">Enter</button>
+            </form>
+         
+         {% else %}
+            <div class="flex flex-col gap-3 w-80" >
+               <div >You seems currently in a session</div>
+               <div class="bg-slate-800 rounded text-white p-4 flex justify-between">
+
+                  <div class="flex flex-col justify-center">
+                     <div>Current Seving: {{current_serving}}</div>
+                     <div>Your Queue: {{queue_number}}</div>
+                  </div>
+
+                  <div class="flex flex-col gap-3">
+                     <a href="{% url 'core_queue' %}">
+                        <button class="btn btn-warning">Go to session</button>
+                     </a>
+                     <button class="btn">I'll just cancel</button>
+                  </div>
+               </div>
+            </div>
+         {% endif %}
+            
+         {% for message in messages %}
+            {{message}}
+         {% endfor %}
+            
+      </div>
+   </div>
+   {% endblock content %}

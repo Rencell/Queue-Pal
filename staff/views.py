@@ -1,5 +1,6 @@
 import random
 import string
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, ListView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,6 +8,7 @@ from braces.views import GroupRequiredMixin # type: ignore
 from django.urls import reverse_lazy
 from core.models import Room, UserRoom, RoomStatus
 from datetime import date
+
 
 class user_index(GroupRequiredMixin, TemplateView):
     
@@ -57,8 +59,15 @@ class room_view(GroupRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         uid = self.kwargs.get('code')
+        room = Room.objects.get(code=uid)
+        try:
+            userroom = UserRoom.objects.get(room=room, queue_number=room.current_serving_queue_number)
+            context['next_user'] = userroom.user 
+            context['next_issue'] = userroom.issue 
+        except UserRoom.DoesNotExist:
+            pass
         
-        context['Room'] = Room.objects.get(code=uid)
+        context['Room'] = room
         return context
     
     
@@ -87,5 +96,29 @@ class destroy_customer(GroupRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('staff_queue_room', kwargs={'code': self.kwargs.get('code')})
     
+    
+# -------------------------------
+from channels.layers import get_channel_layer
+from django.template.loader import get_template
+from asgiref.sync import async_to_sync
+
+def htmxtry(request):
+    if request.method == 'POST':
+        
+        message_html = get_template('core/partials/countdown.html').render({})
+        message_html = message_html.replace('\n', '').replace('\r', '')
+        room = "CKKG"
+        channel_layer = get_channel_layer()
+        
+        async_to_sync(channel_layer.group_send)(
+            room,
+            {
+                'type' : 'queue_number',
+                'message' : message_html
+            }
+        )
+        
+    
+    return HttpResponse("<div>Timer</div>")
     
     

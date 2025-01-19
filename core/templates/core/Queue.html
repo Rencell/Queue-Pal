@@ -2,58 +2,93 @@
 
 {% block content %}
 
-    
-<div class="rounded-edge w-screen absolute bg-slate-800"> </div>
-    <div class="flex flex-col  lg:flex-row gap-0 lg:gap-40 h-screen justify-center items-center">
-        
-        <div class="flex flex-col gap-5  items-center">
-            <div>
-                <div class="font-semibold lg:text-xl sm:text-sm relative text-white">
-                    Hello, {{user.username}}!
-                </div>
-                <!-- <form action method="post">
+<div class="rounded-edge w-screen absolute bg-slate-8na00"> </div>
+<div
+  class="flex flex-col  lg:flex-row gap-0 lg:gap-40 h-screen justify-center items-center">
+
+  <div class="flex flex-col gap-5  items-center">
+    <div>
+      <div class="font-semibold lg:text-xl sm:text-sm relative text-white">
+        Hello, {{user.username}}!
+      </div>
+      <!-- <form action method="post">
                     {% csrf_token %}
                     <input type="submit" value="Cancel Queue">
                 </form> -->
-            </div>
-        
-            <div
-                class="bg-warning p-4 circle-cut place-content-center place-items-center text-black mb-9">
-                <div>Your Ticket is</div>
-                <div hx-ext="ws" ws-connect="/ws/chat/{{room_code}}/">
-        
-                    <div class="text-3xl font-bold"
-                        id="count">{{room.queue_number}}</div>
-                </div>
-            </div>
-        
-            <div
-                class="radial-progress place-items-center"
-                style="--value:70; --size:15rem; --thickness: 1rem;"
-                role="progressbar">
-                <div class="text-sm">The current queue:</div>
-                <div class="text-7xl font-semibold text-warning">{{current_serving}}</div>
-            </div>
-        
-            <div class="text-center font-medium text-gray-500">
-                <div>We will notify you when your  </div>
-                <div>queue number is approaching.</div>
-            </div>
-        </div>
-
-        <div class="flex justify-center bg-slate-800 w-96 h-10 overflow-hidden hover:h-96 transition-all duration-300 rounded-lg absolute bottom-0">
-            <ul class="steps steps-vertical py-10">
-                <li class="step step-warning">Register</li>
-                <li class="step step-warning">Choose plan</li>
-                <li class="step">Purchase</li>
-                <li class="step">Receive Product</li>
-              </ul>
-        </div>
     </div>
-    
-   
 
+    <div
+      class="bg-warning p-4 circle-cut place-content-center place-items-center text-black mb-9">
+      <div>Your Ticket is</div>
 
+      <div class="text-3xl font-bold">{{room.queue_number}}</div>
+
+    </div>
+
+    <div hx-ext="ws" ws-connect="/ws/chat/{{room_code}}/">
+      <div id="timer">
+        <div
+          class="radial-progress place-items-center"
+          style="--value:100; --size:15rem; --thickness: 1rem;"
+          role="progressbar">
+          <div class="text-sm">The current queue:</div>
+          <div class="text-7xl font-semibold text-warning">
+            <div id="count">{{current_serving}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- {% include 'core/partials/countdown.html' %} -->
+
+    <div class="text-center font-medium text-gray-500">
+      <div>We will notify you when your </div>
+      <div>queue number is approaching.</div>
+    </div>
+  </div>
+
+  <div
+    class="flex flex-col items-center bg-slate-800 w-96 h-10 overflow-hidden hover:h-96 transition-all duration-300 rounded-lg absolute bottom-0">
+    <div class="w-full flex justify-center items-center pt-2">
+
+      <i class="bi bi-arrow-up-circle text-xl"></i>
+    </div>
+    <ul class="pt-11 timeline timeline-vertical relative right-20">
+      <li>
+
+        <div class="timeline-middle">
+          <i class="text-primary bi bi-check-circle-fill"></i>
+        </div>
+        <div class="timeline-end timeline-box">Waiting for Queue</div>
+        <hr class="bg-primary" />
+      </li>
+      <li>
+        <hr class="bg-primary" />
+        <div class="timeline-middle">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div class="timeline-end timeline-box">Notifying user</div>
+        <hr />
+      </li>
+      <li>
+        <hr />
+        <div class="timeline-middle">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div class="timeline-end timeline-box">Please go to counter</div>
+        <hr />
+      </li>
+      <li>
+        <hr />
+        <div class="timeline-middle">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div class="timeline-end timeline-box">User has been appointed</div>
+        <hr />
+      </li>
+    </ul>
+  </div>
+</div>
 
 <!-- {% for queue in queues %}
         {{queue.queue_number}}

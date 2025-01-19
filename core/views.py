@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView,ListView, DetailView
@@ -8,7 +9,7 @@ from django.urls import reverse_lazy
 from core.models import Room, Status, UserRoom, Issue, RoomStatus
 
 class index(LoginRequiredMixin, TemplateView):
-    template_name = "core/bitch.html"
+    template_name = "core/index.html"
     
     # Status.objects.create(name="PENDING", description="default pending")
     # Status.objects.create(name="SERVING", description="current serving")
@@ -28,6 +29,22 @@ class index(LoginRequiredMixin, TemplateView):
         except Exception as e:
             messages.error(request,e)
         return redirect(reverse_lazy('core_index'))
+    
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        today = date.today()
+        
+        try:
+            isSession = UserRoom.objects.get(user=self.request.user, created_at__date=today)
+            context['current_serving'] = isSession.room.current_serving_queue_number
+            context['queue_number'] = isSession.queue_number
+        except UserRoom.DoesNotExist:
+            isSession = False
+        
+        
+        context['isSession'] = isSession
+        return context
+
 
 class issue_view(LoginRequiredMixin, TemplateView):
     template_name="core/issue.html"

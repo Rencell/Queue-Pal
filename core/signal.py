@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.dispatch import receiver, Signal
 from channels.layers import get_channel_layer
 from django.template.loader import get_template
-from core.models import UserRoom
+from core.models import UserRoom, Room
 from asgiref.sync import async_to_sync
 
 
@@ -24,5 +24,17 @@ def send_signal(sender, instance, created, **kwargs):
                 'message' : message_html
             }
         )
+        
+    
+        
+@receiver(post_save, sender=Room)
+def send_tatawa(sender, instance, created, **kwargs):
+    if not created:
+        
+        try:
+            userroom = UserRoom.objects.get(room=instance,queue_number=instance.current_serving_queue_number)
+        except UserRoom.DoesNotExist:
+            pass
+        
     
     

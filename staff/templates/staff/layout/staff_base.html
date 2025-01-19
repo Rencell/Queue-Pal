@@ -4,14 +4,17 @@
 
 <div class="flex w-full flex-col lg:flex-row p-4 gap-3">
 
-    <div class="card rounded-box grid grid-rows-[auto,1fr] h-screen flex-grow p-4">
+    <div class="card rounded-box grid grid-rows-[auto,1fr] h-screen flex-grow p-4"
+    hx-ext="ws"
+    ws-connect="/ws/chat/{{Room.code}}/">
         
         {% block staff_content %}
             
         {% endblock staff_content %}
             
     </div>
-    <div class="card bg-base-300 rounded-box grid lg:w-96 h-screen place-items-center sm:w-full overflow-y-auto">
+    <div class="card bg-base-300 rounded-box grid lg:w-96 h-screen place-items-center sm:w-full overflow-y-auto"
+    >
         
         {% block side_content %}
             content

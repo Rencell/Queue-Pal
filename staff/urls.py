@@ -9,3 +9,9 @@ urlpatterns = [
     path('<str:code>/create', views.store_customer.as_view(), name="staff_create_customer"),
     path('<str:code>/<int:pk>/delete', views.destroy_customer.as_view(), name="staff_delete_customer"),
 ]
+
+htmxpattern = [
+    path('timer/', views.htmxtry, name="staff_timer"),
+]
+
+urlpatterns += htmxpattern

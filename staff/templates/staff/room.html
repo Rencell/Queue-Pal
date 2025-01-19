@@ -2,38 +2,118 @@
 
 {% block staff_content %}
 
-<div role="alert" class="alert alert-info">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      class="h-6 w-6 shrink-0 stroke-current">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-    </svg>
-    <span>New software update available.</span>
-  </div>
-<div class="place-items-center flex flex-col justify-center gap-4 grow" hx-ext="ws"
-    ws-connect="/ws/chat/{{Room.code}}/">
-    <div class="text-9xl" id="count">{{Room.current_serving_queue_number}}</div>
-   
+<div role="alert" class="alert alert-dark">
+    <i class="bi bi-info-circle"></i>
+    <div class="flex flex-col">
+
+        <span id="trykolang">Name: {{next_user}}</span>
+        <div id="trykolangule">Issue: {{next_issue}}</div>
+    </div>
+
+    <div x-data="countdown(60)" class="flex flex-col gap-2">
+        <button 
+            @click="toggleCountdown()" 
+            class="btn btn-sm"
+            :disabled="open"
+            hx-post="{% url 'staff_timer' %}"  
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            hx-target="#lol">
+            
+            <span x-show="!open">
+                Timer
+            </span>
+            <div id="lol">Timer</div>
+            
+            <span x-show="open">
+                <div  class="countdown font-mono text-lg">
+                    <span :style="'--value:' + counter"></span>
+                </div>
+            </span>
+        </button>
+
+        <button class="btn btn-sm btn-warning">Appoint</button>
+    </div>
+</div>
+<div class="place-items-center flex flex-col justify-center gap-4 grow">
+    <div class="text-9xl">
+        <div id="count">{{Room.current_serving_queue_number}}</div>
+    </div>
+
     <div class="flex gap-2">
 
         <form action="{% url 'staff_create_customer' code=Room.code %}">
-
             <button class="btn" type="submit">Add customer</button>
         </form>
 
-        <form ws-send>
-            <input type="hidden" name="hehe" value="hehe">
-            <button class="btn btn-warning" type="submit">Next -></button>
-
-        </form>
+        <div x-data="{ 
+                isSubmit:false,
+                submitForm() { 
+                    this.isSubmit = true;
+                    setTimeout(() => { 
+                        this.isSubmit = false; 
+                    }, 1000); 
+                }
+            }">
+            <form ws-send @submit.prevent="submitForm">
+                <input type="hidden" name="hehe" value="hehe">
+                <button
+                    class="btn btn-warning"
+                    :disabled="isSubmit"
+                    type="submit">
+                    Next
+                    <span x-show="isSubmit"
+                        class="loading loading-spinner loading-sm"></span>
+                </button>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    function countdown(initialValue) {
+      return {
+        open: localStorage.getItem('staff_open') || false,
+        counter: parseInt(localStorage.getItem('staff_timer')) || 60,
+        countdownInterval: null,
+
+        init(){
+            let trys = localStorage.getItem('staff_open');
+
+            if (trys !== null) {
+                this.open = true; 
+                this.startCountdown();
+            }
+        },
+        toggleCountdown() {
+            this.open = true
+        
+            if (this.open) {
+              localStorage.setItem('staff_open', true);
+              this.startCountdown();
+            } else {
+              this.stopCountdown();
+              this.open = false
+            }
+          },
+        startCountdown() {
+          const interval = setInterval(() => {
+            if (this.counter > 0) {
+              this.counter--;
+              localStorage.setItem('staff_timer', this.counter);
+            } else {
+              clearInterval(interval); // Stop the countdown at 0
+              alert('Countdown completed!');
+              localStorage.removeItem('staff_timer')
+              localStorage.removeItem('staff_open')
+              this.open = false; 
+              this.counter = initialValue;
+            }
+          }, 1000);
+        }
+      };
+    }
+</script>
+
 {% endblock staff_content %}
 
 <!-- ------------------------------------------------------------------ -->

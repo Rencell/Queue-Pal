@@ -49,7 +49,8 @@ class Room(models.Model):
             raise ValidationError("A room has already been created for this staff today.")
 
     def save(self, *args, **kwargs):
-        self.validate() 
+        if self.pk is None:
+            self.validate() 
         super().save(*args, **kwargs)
         
     def __str__(self):
