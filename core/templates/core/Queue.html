@@ -2,7 +2,12 @@
 
 {% block content %}
 
-<div class="rounded-edge w-screen absolute bg-slate-8na00"> </div>
+<div class="rounded-edge w-screen absolute bg-slate-800"> 
+
+</div>
+
+
+
 <div
   class="flex flex-col  lg:flex-row gap-0 lg:gap-40 h-screen justify-center items-center">
 
@@ -25,21 +30,39 @@
 
     </div>
 
-    <div hx-ext="ws" ws-connect="/ws/chat/{{room_code}}/">
-      <div id="timer">
-        <div
-          class="radial-progress place-items-center"
-          style="--value:100; --size:15rem; --thickness: 1rem;"
-          role="progressbar">
-          <div class="text-sm">The current queue:</div>
-          <div class="text-7xl font-semibold text-warning">
-            <div id="count">{{current_serving}}</div>
+    
+
+    {% if userroom_status == 13 %}
+      {% include 'core/partials/countdown.html' %}
+    {% elif userroom_status == 4 %}
+      <span class="text-error">Your queue has been cancelled</span>
+    {% elif userroom_status == 2 %}
+      <span class="text-green-400 text-lg">Your queue has been appointed,</span>
+      <span class="text-green-400 text-lg"> Thank you ☺</span>
+
+    {% else %}
+      <div hx-ext="ws" ws-connect="/ws/chat/{{room_code}}/">
+        <div id="timer">
+          <div
+            class="radial-progress place-items-center"
+            style="--value:100; --size:15rem; --thickness: 1rem;"
+            role="progressbar">
+            <div class="text-sm">The current queue:</div>
+            <div class="text-7xl font-semibold text-warning">
+              <div id="count">{{current_serving}}</div>
+            </div>
+            <div class="text-sm font-semibold text-warning" id="queue_turn">
+              
+              {% if current_serving == room.queue_number %}
+                Your turn now
+              {% endif %}
+              
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- {% include 'core/partials/countdown.html' %} -->
+    {% endif %}
+      
 
     <div class="text-center font-medium text-gray-500">
       <div>We will notify you when your </div>
@@ -88,7 +111,14 @@
       </li>
     </ul>
   </div>
+
+
 </div>
+
+<div id="toast_alert">
+
+</div>
+
 
 <!-- {% for queue in queues %}
         {{queue.queue_number}}

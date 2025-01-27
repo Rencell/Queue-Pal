@@ -11,7 +11,9 @@ urlpatterns = [
 ]
 
 htmxpattern = [
-    path('timer/', views.htmxtry, name="staff_timer"),
+    path('timer/<int:userroom_id>', views.htmxtry, name="staff_timer"),
+    path('appointing/<int:userroom_id>', views.appoint_user, name="staff_appoint"),
+    path('noshow/<int:userroom_id>', views.noshow_user, name="staff_noshow"),
 ]
 
 urlpatterns += htmxpattern

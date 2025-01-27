@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from braces.views import GroupRequiredMixin # type: ignore
 from django.urls import reverse_lazy
+from django.contrib.auth.models import AbstractUser
 
 class CustomLoginView(LoginView):
     group_required = ['Staff', 'admin']

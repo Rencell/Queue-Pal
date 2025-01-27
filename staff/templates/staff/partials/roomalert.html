@@ -1,0 +1,87 @@
+<div id='roomalert' hx-swap-oob='true'>
+
+    <div id='toast_alert'>
+
+    </div>
+
+    <div role='alert' class='alert alert-dark'>
+        <i class='bi bi-info-circle'></i>
+        
+        <div class='flex flex-col gap-1'>
+            
+            {% if userroom_status == 4 %}
+                <div class='badge badge-error gap-2'>
+                    No Show
+                </div>
+            {% elif userroom_status == 2 %}
+                <div class='badge badge-success gap-2'>
+                    Success
+                </div>
+            {% elif userroom_status == 14 %}
+                <div class='badge badge-secondary gap-2'>
+                    Physical Guess
+                </div>
+            {% endif %}
+            
+            
+            {% if userroom %}
+                <span id='trykolang'>Name: {{userroom.user|default:"Guess"}}</span>
+            {% else %}
+                <span id='trykolang'>Name: </span>
+
+            {% endif %}
+            <div id='trykolangule'>Issue: {{userroom.issue}}</div>
+                
+
+        </div>
+        <div x-data='countdown(5)' class='flex flex-col gap-2'>
+            <button 
+                
+                {% if userroom %}
+                    @click='toggleCountdown()' 
+                {% endif %}
+                class='btn btn-sm btn-active btn-active'
+                :disabled='open'
+                hx-post='{% url "staff_timer" userroom.id|default:0 %}'  
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                hx-target='#lol'>
+                
+                
+                <div id='lol'>
+                    <span x-show='!open' class='flex gap-2'>
+                        <i class='bi bi-stopwatch'></i> <span>Timer</span>
+                    </span>
+                    <div id='tim'></div>
+                    <span x-show='open'>
+                        <div class='countdown font-mono text-lg'>
+                            <span :style='`--value:${counter}`'></span>
+                        </div>
+                    </span>
+                </div>
+            </button>
+            
+            
+           
+                
+
+            <div class='flex gap-2'>
+                <button 
+                    type='submit'
+                    hx-post='{% url "staff_noshow" userroom.id|default:0 %}'
+                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                    class='btn btn-sm btn-neutral'
+                    hx-target='#noshow'>
+                    <div id='noshow'>No Show</div>
+                </button>
+
+                <button type='submit' 
+                    class='btn btn-sm btn-primary' 
+                    hx-post='{% url "staff_appoint" userroom.id|default:0 %}' 
+                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                    hx-target='#appoint'>
+                    <div id='appoint'>Appoint</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<dialog id="my_modal_1" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Take a Break</h3>
+    <div class="w-full flex flex-col items-center gap-3">
+      <label class="form-control w-full max-w-xs pt-5">
+        <div class="label">
+          <span class="label-text">I'll take a break for a reason:</span>
+        </div>
+        <form method="post"
+          action="{% url 'staff_queue_room' code=Room.code %}">
+          {% csrf_token %}
+          <select name="announcement_reason" class="select select-bordered">
+            <option disabled selected>Pick one</option>
+            <option>I'll be having a lunch break</option>
+            <option>The service hour will be closing</option>
+          </select>
+        </label>
+
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text">I'll be back after:</span>
+          </div>
+          <select name="announcement_time" class="select select-bordered">
+            <option disabled selected>Pick a Time</option>
+            <option>10 Minutes</option>
+            <option>30 Minutes</option>
+            <option>1 Hour</option>
+            <option>2 Hour</option>
+            <option>Closing</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-action">
+
+        
+        <button class="btn btn-warning" name="janice">Announce</button>
+      </form>
+      <form method="dialog">
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>

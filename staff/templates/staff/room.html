@@ -2,78 +2,63 @@
 
 {% block staff_content %}
 
-<div role="alert" class="alert alert-dark">
-    <i class="bi bi-info-circle"></i>
-    <div class="flex flex-col">
 
-        <span id="trykolang">Name: {{next_user}}</span>
-        <div id="trykolangule">Issue: {{next_issue}}</div>
-    </div>
-
-    <div x-data="countdown(60)" class="flex flex-col gap-2">
-        <button 
-            @click="toggleCountdown()" 
-            class="btn btn-sm"
-            :disabled="open"
-            hx-post="{% url 'staff_timer' %}"  
-            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-            hx-target="#lol">
-            
-            <span x-show="!open">
-                Timer
-            </span>
-            <div id="lol">Timer</div>
-            
-            <span x-show="open">
-                <div  class="countdown font-mono text-lg">
-                    <span :style="'--value:' + counter"></span>
-                </div>
-            </span>
-        </button>
-
-        <button class="btn btn-sm btn-warning">Appoint</button>
-    </div>
+<div id="roomalert">
+  {% include 'staff/partials/roomalert.html' %}
 </div>
+
 <div class="place-items-center flex flex-col justify-center gap-4 grow">
-    <div class="text-9xl">
-        <div id="count">{{Room.current_serving_queue_number}}</div>
+  <div class="text-2xl font-semibold text-white rounded-3xl bg-[#506AD8] px-4">{{Room.code}}</div>
+  <div class="text-9xl">
+    <div id="count">{{Room.current_serving_queue_number}}</div>
     </div>
-
-    <div class="flex gap-2">
-
+    
+    <div class="flex flex-col gap-2">
+      
+      <div class="flex gap-2">
+        <button class="btn btn-error" type="submit">Back</button>
+        <button class="btn grow" type="submit" onclick="my_modal_1.showModal()">Break</button>
+        {% include 'staff/layout/break_modal.html' %}
         <form action="{% url 'staff_create_customer' code=Room.code %}">
-            <button class="btn" type="submit">Add customer</button>
+          <button class="btn" type="submit">Add customer</button>
         </form>
+        
+          <div x-data="{ 
+                  isSubmit:false,
+                  submitForm() { 
+                      this.isSubmit = true;
+                      setTimeout(() => { 
+                          this.isSubmit = false; 
+                      }, 1000); 
+                  }
+              }">
+              <form ws-send @submit.prevent="submitForm">
+                {% csrf_token %}
+                  <input type="hidden" name="hehe" value="hehe">
+                  <button
+                      class="btn btn-warning"
+                      :disabled="isSubmit"
+                      type="submit">
+                      Next
+                      <span x-show="isSubmit"
+                          class="loading loading-spinner loading-sm"></span>
+                  </button>
+              </form>
+          </div>
+      </div>
 
-        <div x-data="{ 
-                isSubmit:false,
-                submitForm() { 
-                    this.isSubmit = true;
-                    setTimeout(() => { 
-                        this.isSubmit = false; 
-                    }, 1000); 
-                }
-            }">
-            <form ws-send @submit.prevent="submitForm">
-                <input type="hidden" name="hehe" value="hehe">
-                <button
-                    class="btn btn-warning"
-                    :disabled="isSubmit"
-                    type="submit">
-                    Next
-                    <span x-show="isSubmit"
-                        class="loading loading-spinner loading-sm"></span>
-                </button>
-            </form>
-        </div>
+      <div class="flex gap-2">
+        
+      </div>
     </div>
 </div>
 
 <script>
+  
     function countdown(initialValue) {
       return {
         open: localStorage.getItem('staff_open') || false,
-        counter: parseInt(localStorage.getItem('staff_timer')) || 60,
+        counter: parseInt(localStorage.getItem('staff_timer')) || 5,
         countdownInterval: null,
 
         init(){
@@ -114,6 +99,9 @@
     }
 </script>
 
+
+
+
 {% endblock staff_content %}
 
 <!-- ------------------------------------------------------------------ -->
@@ -123,24 +111,35 @@
     <div id="queue_list"
         style="display: flex; gap:10px; flex-direction: column;">
         {% for room in rooms %}
-        <div class="{% if room.user %} bg-warning
-                    {% else %}  bg-info {% endif %} 
+        <div class="{% if room.user %} bg-indigo-800
+                    {% else %}  bg-violet-800 {% endif %} 
                     text-black"
             style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 12px;">
-            <div>
-                {% if room.user %}{{room.user.username}}
-                {% else %}
-                Anonymous
-                {% endif %}
-
-                {{room.issue.description}}
-                <div>Queue Number: {{ room.queue_number }}</div>
+            <div class="flex gap-4">
+                <div class="text-5xl w-7 font-semibold text-white flex flex-col justify-center">{{ room.queue_number }}</div>
+                
+                <div class="flex flex-col gap-1"> 
+                  <div 
+                    class="badge 
+                      {% if room.status.pk == 1 %}
+                      badge-warning
+                      {% elif room.status.pk == 2 %}
+                      badge-success
+                      {% elif room.status.pk == 4 %}
+                      badge-error
+                      {% endif %}
+                    "> 
+                    <div class="font-semibold text-slate-800 text-xs lowercase">{{ room.status }}</div>
+                  </div>
+                  <div class="text-white font-semibold capitalize text-xl">{{room.user.username|default:"Guess"}}</div>
+                  <div class="text-sm text-gray-400">{{room.issue.description}}</div>
+                </div>
             </div>
 
             <form
                 action="{% url 'staff_delete_customer' code=Room.code pk=room.id %}">
                 <button type="submit"
-                    class="p-2 shadow rounded-lg bg-slate-300">
+                    class="p-2 shadow rounded-lg bg-slate-800">
 
                     <i class="bi bi-trash3-fill text-red-500"></i>
                 </button>
@@ -152,3 +151,6 @@
 
 </div>
 {% endblock side_content %}
+
+
+

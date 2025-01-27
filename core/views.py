@@ -14,7 +14,9 @@ class index(LoginRequiredMixin, TemplateView):
     # Status.objects.create(name="PENDING", description="default pending")
     # Status.objects.create(name="SERVING", description="current serving")
     # Status.objects.create(name="CANCELLED", description="ended session or cancelled")
+    # Status.objects.create(name="WAITING", description="being waited")
     # Status.objects.create(name="NO_SHOW", description="did not show")
+    # Status.objects.create(name="PHYSICAL QUEUE", description="queue on physical")
     
     # RoomStatus.objects.create(name="ACTIVE")
     # RoomStatus.objects.create(name="PAUSED")
@@ -81,16 +83,23 @@ class queue_view(LoginRequiredMixin, ListView):
     template_name = "core/Queue.html"
     context_object_name = "room"
     
-    def get_queryset(self):
+    
+    def get_userroom(self):
         userroom_id = self.request.session.get('userroom')
-        query_set = UserRoom.objects.get(id=userroom_id)
+        userroom = UserRoom.objects.get(id=userroom_id)
+        
+        return userroom
+    def get_queryset(self):
+        query_set = self.get_userroom()
         
         return query_set
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         room = self.get_queryset().room
+        userroom = self.get_userroom()
         context['room_code'] = room.code
+        context['userroom_status'] = userroom.status.pk
         context['current_serving'] = room.current_serving_queue_number
         
         return context
@@ -98,8 +107,7 @@ class queue_view(LoginRequiredMixin, ListView):
     def post(self, request, *args, **kwargs):
         # Cancelling the Queue
         CANCEL_STATUS = Status.objects.get(id=3) 
-        userroom_id = self.request.session.get('userroom')
-        query_set = UserRoom.objects.get(id=userroom_id)
+        query_set = self.get_userroom()
         query_set.status = CANCEL_STATUS
         query_set.save()
         

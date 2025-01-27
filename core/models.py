@@ -39,6 +39,7 @@ class Room(models.Model):
     current_serving_queue_number = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(RoomStatus, on_delete=models.CASCADE, default=1)
+    status_description = models.TextField()
 
     class Meta:
         unique_together = ['staff', 'code']
@@ -68,10 +69,10 @@ class UserRoom(models.Model):
         unique_together = ['user', 'room']
         
     def save(self, *args, **kwargs):
-        
-        roomcount = UserRoom.objects.filter(room=self.room).count()
-        roomcount += 1
-        self.queue_number = roomcount
+        if not self.pk:
+            roomcount = UserRoom.objects.filter(room=self.room).count()
+            roomcount += 1
+            self.queue_number = roomcount
         
         super().save(*args, **kwargs)
 

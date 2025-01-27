@@ -30,11 +30,24 @@ def send_signal(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Room)
 def send_tatawa(sender, instance, created, **kwargs):
     if not created:
-        
-        try:
-            userroom = UserRoom.objects.get(room=instance,queue_number=instance.current_serving_queue_number)
-        except UserRoom.DoesNotExist:
-            pass
+        userroom = UserRoom.objects.filter(room=instance,queue_number=instance.current_serving_queue_number).first()
+        if userroom:
+            message_html = get_template('core/partials/notification.html').render()
+            message_html = message_html.replace('\n', '').replace('\r', '')
+            if userroom.user:
+                room =  f'{userroom.room.code}_{userroom.user.username}'
+            else:
+                room = f'{userroom.room.code}_guess'
+            channel_layer = get_channel_layer()
+            
+            async_to_sync(channel_layer.group_send)(
+                room,
+                {
+                    'type' : 'queue_number',
+                    'message' : message_html
+                }
+            )
+       
         
     
     
