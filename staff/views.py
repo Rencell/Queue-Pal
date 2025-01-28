@@ -8,11 +8,11 @@ from braces.views import GroupRequiredMixin # type: ignore
 from django.urls import reverse_lazy
 from core.models import Room, UserRoom, RoomStatus, Status
 from datetime import date
-
+import re
+from datetime import datetime, timedelta
+from channels.layers import get_channel_layer
 
 class user_index(GroupRequiredMixin, TemplateView):
-    
-    
     
     login_url = reverse_lazy("login")
     group_required = ['Staff', 'admin']
@@ -24,17 +24,14 @@ class user_index(GroupRequiredMixin, TemplateView):
         Room.objects.create(staff=request.user, code=uid)
         return redirect(reverse_lazy('staff_queue_room', kwargs={'code': uid}))
     
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
         today = date.today()
         try:
             check_room = Room.objects.get(staff=self.request.user, created_at__date=today)
         except Room.DoesNotExist:
             check_room = Room.objects.none()
 
-        
         context['available'] = check_room
         return context
     
@@ -46,9 +43,6 @@ class room_view(GroupRequiredMixin, ListView):
     group_required = ['Staff', 'admin']
     login_url = reverse_lazy("login")
     context_object_name="rooms"
-    
-    
-    
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -71,20 +65,55 @@ class room_view(GroupRequiredMixin, ListView):
     
     def post(self, request, *args, **kwargs):
         
+        def get_extracted_time(str_word):
+            match = re.search(r'\d+', str_word)
+            if "minutes" in str(str_word).lower():
+                current_time = datetime.now() + timedelta(minutes=int(match.group(0)))
+            elif "hour" in str(str_word).lower():
+                current_time = datetime.now() + timedelta(hours=int(match.group(0)))
+                
+            formatted_new_time = current_time.strftime("%I:%M %p")
+            return formatted_new_time
+        
+        
+        
         code = self.kwargs.get('code')
         if request.method == 'POST':
-            if 'janice' in request.POST:
-                roomstatus = RoomStatus.objects.filter(id=2).first()
-                room = Room.objects.filter(code=code).first()
-                room.status = roomstatus
+            if 'announce_form' in request.POST:
                 reason = request.POST.get('announcement_reason')
                 time = request.POST.get('announcement_time')
-                room.status_description = f"{reason},{time}"
+                PAUSE_ROOM = 2
+                roomstatus = RoomStatus.objects.filter(id=PAUSE_ROOM).first()
+                room = Room.objects.filter(code=code).first()
+                room.status = roomstatus
+                room.status_description = f"{reason}"
+                room.status_time = f"{time}"
+                room.status_evaluated_time = f"{get_extracted_time(time)}"
                 room.save()
-            # userroom_id = request.POST.get('userroom')
-            # userroom = UserRoom.objects.filter(pk=userroom_id).first()
-            # userroom.status = Status.objects.get(id=3)
-            # userroom.save()
+                
+            elif 'resume_session' in request.POST:
+                RESUME_ROOM = 1
+                roomstatus = RoomStatus.objects.filter(id=RESUME_ROOM).first()
+                room = Room.objects.filter(code=code).first()
+                room.status = roomstatus
+                room.status_description     = "1"
+                room.status_time            = "1"
+                room.status_evaluated_time  = "1"
+                room.save()
+                
+                message_html = get_template('core/partials/announce_continue_modal.html').render({})
+                message_html = message_html.replace('\n', '').replace('\r', '')
+                rooms =  f'{room.code}'
+                channel_layer = get_channel_layer()
+                
+                async_to_sync(channel_layer.group_send)(
+                    rooms,
+                    {
+                        'type' : 'queue_number',
+                        'message' : message_html
+                    }
+                )
+                
             url = reverse_lazy('staff_queue_room', kwargs={'code': code})
             return redirect(url)
     

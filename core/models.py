@@ -40,6 +40,8 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(RoomStatus, on_delete=models.CASCADE, default=1)
     status_description = models.TextField()
+    status_time = models.CharField(max_length=50)
+    status_evaluated_time = models.CharField(max_length=50)
 
     class Meta:
         unique_together = ['staff', 'code']
@@ -65,8 +67,8 @@ class UserRoom(models.Model):
     queue_number = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    class Meta:
-        unique_together = ['user', 'room']
+    # class Meta:
+    #     unique_together = ['user', 'room', 'status']
         
     def save(self, *args, **kwargs):
         if not self.pk:

@@ -16,7 +16,7 @@
     <div class="flex flex-col gap-2">
       
       <div class="flex gap-2">
-        <button class="btn btn-error" type="submit">Back</button>
+        <button class="btn" type="submit">Back</button>
         <button class="btn grow" type="submit" onclick="my_modal_1.showModal()">Break</button>
         {% include 'staff/layout/break_modal.html' %}
         <form action="{% url 'staff_create_customer' code=Room.code %}">
@@ -125,6 +125,8 @@
                       badge-warning
                       {% elif room.status.pk == 2 %}
                       badge-success
+                      {% elif room.status.pk == 3 %}
+                      badge-error
                       {% elif room.status.pk == 4 %}
                       badge-error
                       {% endif %}

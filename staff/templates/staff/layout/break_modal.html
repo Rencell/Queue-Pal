@@ -1,8 +1,19 @@
 <dialog id="my_modal_1" class="modal">
   <div class="modal-box">
     <h3 class="text-lg font-bold">Take a Break</h3>
+    
+    {% if Room.status.pk == 2 %}
+      <div class="flex justify-center items-center w-full h-48">
+        <form method="post" action="{% url 'staff_queue_room' code=Room.code %}" >
+          {% csrf_token %}
+          <button class="btn btn-warning" name="resume_session">Continue Session</button> 
+        </form>
+      </div>
+      <div class="modal-action">
+    {% else %}
+
     <div class="w-full flex flex-col items-center gap-3">
-      <label class="form-control w-full max-w-xs pt-5">
+      <label class="form-control grow max-w-xs pt-5">
         <div class="label">
           <span class="label-text">I'll take a break for a reason:</span>
         </div>
@@ -30,11 +41,12 @@
           </select>
         </label>
       </div>
-      <div class="modal-action">
-
-        
-        <button class="btn btn-warning" name="janice">Announce</button>
+        <div class="modal-action">
+        <button class="btn btn-warning" name="announce_form">Announce</button>
       </form>
+    {% endif %}
+      
+      
       <form method="dialog">
         <button class="btn">Close</button>
       </form>

@@ -1,6 +1,6 @@
 <div id='roomalert' hx-swap-oob='true'>
 
-    <div id='toast_alert'>
+    <div id='max_alert'>
 
     </div>
 
@@ -16,6 +16,10 @@
             {% elif userroom_status == 2 %}
                 <div class='badge badge-success gap-2'>
                     Success
+                </div>
+            {% elif userroom_status == 3 %}
+                <div class='badge badge-error gap-2'>
+                    Cancelled
                 </div>
             {% elif userroom_status == 14 %}
                 <div class='badge badge-secondary gap-2'>

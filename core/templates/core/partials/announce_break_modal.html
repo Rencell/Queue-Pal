@@ -1,0 +1,35 @@
+<div id='showmodal' hx-swap-oob='true'>
+
+    {% if room.status.pk == 2 %}
+    <dialog id='my_modal_3' class='modal'>
+    <div class='modal-box'>
+        <form method='dialog'>
+        <button class='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>X</button>
+        </form>
+
+        
+        <h3 class='text-lg font-bold'></h3>
+
+        <p class='text-8xl text-center pt-7'><i class='bi bi-cup-hot'></i></p>
+
+        <h1 class='text-center text-xl font-semibold pt-7'>{{room.status_time}} Break</h1>
+        
+        <p class='text-center pt-3 text-sm'>{{room.status_description}}, <br> We will be back at <span class='font-semibold text-warning'>{{room.status_evaluated_time}}</span></p>
+
+        <div class='w-full text-center pt-10'>
+            <form method='dialog'>
+            <button class='btn px-8 btn-warning'>Uhh... Sure</button>
+        </form>
+        </div>
+    </div>
+    </dialog>
+
+    <script>
+        let modal = document.getElementById('my_modal_3');
+        modal.showModal();
+    </script>
+        
+    {% endif %}
+        
+</div>
+    

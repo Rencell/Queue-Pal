@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block content %}
 
     
-    Thank you, Have a nice day 😉
+    <div class="flex justify-center items-center h-dvh flex-col gap-3">
+        <p class="text-error font-semibold">You have cancelled your session</p>
+        <div class="w-96">
+
+            <img src="{% static 'images/Creativity-bro.png' %}" alt="">
+        </div>
+        <div>Thank you, Have a nice day 😉</div>
+        <a href="/core" class="btn btn-warning btn-sm mt-4">Back Home</a>
+    </div>
 {% endblock content %}

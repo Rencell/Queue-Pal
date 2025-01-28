@@ -11,7 +11,10 @@
 <div
   class="flex flex-col  lg:flex-row gap-0 lg:gap-40 h-screen justify-center items-center">
 
-  <div class="flex flex-col gap-5  items-center">
+  <div class="flex flex-col gap-5 items-center">
+    <form action="{% url 'core_queue' %}" method="post">
+      {% csrf_token %}
+      <button class="btn btn-sm btn-error text-slate-700 relative" name="cancel_session">Cancel Session</button></form>
     <div>
       <div class="font-semibold lg:text-xl sm:text-sm relative text-white">
         Hello, {{user.username}}!
@@ -26,11 +29,9 @@
       class="bg-warning p-4 circle-cut place-content-center place-items-center text-black mb-9">
       <div>Your Ticket is</div>
 
-      <div class="text-3xl font-bold">{{room.queue_number}}</div>
+      <div class="text-3xl font-bold">{{userroom.queue_number}}</div>
 
     </div>
-
-    
 
     {% if userroom_status == 13 %}
       {% include 'core/partials/countdown.html' %}
@@ -47,19 +48,31 @@
             class="radial-progress place-items-center"
             style="--value:100; --size:15rem; --thickness: 1rem;"
             role="progressbar">
-            <div class="text-sm">The current queue:</div>
-            <div class="text-7xl font-semibold text-warning">
-              <div id="count">{{current_serving}}</div>
-            </div>
-            <div class="text-sm font-semibold text-warning" id="queue_turn">
+            {% if userroom.room.status.pk == 2 %}
+              <div class="text-sm">{{userroom.room.status_description}}</div>
+              <div class="text-xl font-semibold text-warning text-center">
+                <div>Will be back in <br> <span class="text-rose-400">{{userroom.room.status_evaluated_time}}</span></div>
+              </div>
               
-              {% if current_serving == room.queue_number %}
-                Your turn now
-              {% endif %}
-              
-            </div>
+            {% else %}
+              <div class="text-sm">The current queue:</div>
+              <div class="text-7xl font-semibold text-warning">
+                <div id="count">{{current_serving}}</div>
+              </div>
+              <div class="text-sm font-semibold text-warning" id="queue_turn">
+                
+                {% if current_serving == userroom.queue_number %}
+                  Your turn now
+                {% endif %}
+                
+              </div>
+
+            {% endif %}
+
           </div>
         </div>
+
+      
       </div>
     {% endif %}
       
@@ -70,48 +83,6 @@
     </div>
   </div>
 
-  <div
-    class="flex flex-col items-center bg-slate-800 w-96 h-10 overflow-hidden hover:h-96 transition-all duration-300 rounded-lg absolute bottom-0">
-    <div class="w-full flex justify-center items-center pt-2">
-
-      <i class="bi bi-arrow-up-circle text-xl"></i>
-    </div>
-    <ul class="pt-11 timeline timeline-vertical relative right-20">
-      <li>
-
-        <div class="timeline-middle">
-          <i class="text-primary bi bi-check-circle-fill"></i>
-        </div>
-        <div class="timeline-end timeline-box">Waiting for Queue</div>
-        <hr class="bg-primary" />
-      </li>
-      <li>
-        <hr class="bg-primary" />
-        <div class="timeline-middle">
-          <i class="bi bi-check-circle-fill"></i>
-        </div>
-        <div class="timeline-end timeline-box">Notifying user</div>
-        <hr />
-      </li>
-      <li>
-        <hr />
-        <div class="timeline-middle">
-          <i class="bi bi-check-circle-fill"></i>
-        </div>
-        <div class="timeline-end timeline-box">Please go to counter</div>
-        <hr />
-      </li>
-      <li>
-        <hr />
-        <div class="timeline-middle">
-          <i class="bi bi-check-circle-fill"></i>
-        </div>
-        <div class="timeline-end timeline-box">User has been appointed</div>
-        <hr />
-      </li>
-    </ul>
-  </div>
-
 
 </div>
 
@@ -119,6 +90,9 @@
 
 </div>
 
+<div id="showmodal">
+  {% include 'core/partials/announce_break_modal.html' %}
+</div>
 
 <!-- {% for queue in queues %}
         {{queue.queue_number}}
