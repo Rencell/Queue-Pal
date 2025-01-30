@@ -58,7 +58,7 @@
     function countdown(initialValue) {
       return {
         open: localStorage.getItem('staff_open') || false,
-        counter: parseInt(localStorage.getItem('staff_timer')) || 5,
+        counter: parseInt(localStorage.getItem('staff_timer')) || 60,
         countdownInterval: null,
 
         init(){

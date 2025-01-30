@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from django.db import IntegrityError
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView,ListView, DetailView
 from django.contrib import messages
@@ -26,9 +27,14 @@ class index(LoginRequiredMixin, TemplateView):
         user_room = str(request.POST.get('user_room')).upper()
         
         try:
-            room = Room.objects.get(code=user_room)
-            if room:
+            ACTIVE = 1 
+            TERMINATED = 3
+            room = Room.objects.filter(code=user_room).first()
+            
+            if room.status.id == ACTIVE:
                 return redirect(reverse_lazy('core_issue', kwargs={'code': user_room}))
+            elif room.status.id == TERMINATED:
+                messages.error(request,"The room has already been terminated")
         except Exception as e:
             messages.error(request,e)
         return redirect(reverse_lazy('core_index'))
@@ -156,4 +162,6 @@ class queue_error(LoginRequiredMixin, TemplateView):
     
 class closing_view(LoginRequiredMixin, TemplateView):
     template_name = "core/salutation.html"
+    
+
 

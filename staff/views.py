@@ -80,15 +80,25 @@ class room_view(GroupRequiredMixin, ListView):
         code = self.kwargs.get('code')
         if request.method == 'POST':
             if 'announce_form' in request.POST:
+                PAUSE_ROOM = 2
+                pausestatus = RoomStatus.objects.filter(id=PAUSE_ROOM).first()
+                TERMINATE = 3
+                terminatestatus = RoomStatus.objects.filter(id=TERMINATE).first()
+                
                 reason = request.POST.get('announcement_reason')
                 time = request.POST.get('announcement_time')
-                PAUSE_ROOM = 2
-                roomstatus = RoomStatus.objects.filter(id=PAUSE_ROOM).first()
                 room = Room.objects.filter(code=code).first()
-                room.status = roomstatus
-                room.status_description = f"{reason}"
-                room.status_time = f"{time}"
-                room.status_evaluated_time = f"{get_extracted_time(time)}"
+                if "closing" not in str(time).lower():
+                    room.status = pausestatus
+                    room.status_description = f"{reason}"
+                    room.status_time = f"{time}"
+                    room.status_evaluated_time = f"{get_extracted_time(time)}"
+                else:
+                    room.status = terminatestatus
+                    room.status_description = f"{reason}"
+                    room.status_time            = "1"
+                    room.status_evaluated_time  = "1"
+                    
                 room.save()
                 
             elif 'resume_session' in request.POST:

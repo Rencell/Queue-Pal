@@ -17,7 +17,7 @@
             
             <form class="flex flex-col gap-3 w-80" action="{% url 'core_index' %}" method="post">
                {% csrf_token %}
-               <input type="text" name="user_room" placeholder="Please input code..." class="input input-bordered w-full max-w-xs">
+               <input type="text" name="user_room" placeholder="Please input code..." class="input input-bordered w-full max-w-xs" autocomplete="off">
                <button type="submit" class="btn btn-warning">Enter</button>
             </form>
          

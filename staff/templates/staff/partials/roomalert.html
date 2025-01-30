@@ -13,6 +13,10 @@
                 <div class='badge badge-error gap-2'>
                     No Show
                 </div>
+            {% elif userroom_status == 1 %}
+                <div class='badge badge-warning gap-2'>
+                    Pending
+                </div>
             {% elif userroom_status == 2 %}
                 <div class='badge badge-success gap-2'>
                     Success
@@ -38,7 +42,7 @@
                 
 
         </div>
-        <div x-data='countdown(5)' class='flex flex-col gap-2'>
+        <div x-data='countdown(60)' class='flex flex-col gap-2'>
             <button 
                 
                 {% if userroom %}

@@ -7,4 +7,5 @@ urlpatterns = [
     path('core/', include('core.urls')),
     path('staff/', include('staff.urls')),
     path('', include('Accounts.urls')),
+    path('webpush/', include('webpush.urls')),
 ]
