@@ -13,7 +13,7 @@ class NotificationAPI {
 
     static send(title, options = {}) {
         if (!('Notification' in window)) {
-            console.error('This browser does not support desktop notifications.');
+            console.error('not supported.');
             return;
         }
 
@@ -37,8 +37,6 @@ class NotificationAPI {
     }
 }
 
-// Usage Example:
-// Request permission when the app starts
 NotificationAPI.requestPermission();
 
 

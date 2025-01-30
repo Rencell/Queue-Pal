@@ -3,8 +3,24 @@
 
 
 {% block content %}
+
+<script>
+   function requestPermission() {
+       if (!('Notification' in window)) {
+           console.error('This browser does not support desktop notifications.');
+           return;
+       }
+       Notification.requestPermission().then(permission => {
+           if (permission !== 'granted') {
+               console.warn('Notification permission denied.');
+           }
+       });
+   }
+   requestPermission();
+</script>
+
 <div class="p-4">
-       
+      
       <form class="flex justify-end" action="{% url 'logout' %}" method="post">
          {% csrf_token %}
          <button type="submit" class="btn btn-sm btn-warning">Logout</button>

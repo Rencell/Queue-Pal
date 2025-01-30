@@ -52,7 +52,7 @@
                 :disabled='open'
                 hx-post='{% url "staff_timer" userroom.id|default:0 %}'  
                 hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-                hx-target='#lol'>
+                hx-target='#tim'>
                 
                 
                 <div id='lol'>

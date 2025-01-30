@@ -1,44 +1,50 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 
 {% block content %}
 
 
-   <div class="hero bg-base-200 min-h-screen">
-    <div class="hero-content flex-col lg:flex-row-reverse">
-      <div class="text-center lg:text-left">
-        <h1 class="text-5xl font-bold text-warning">Login now!</h1>
-        <p class="py-6 ">
-          Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-          quasi. In deleniti eaque aut repudiandae et a id nisi.
-        </p>
+<div class="hero bg-base-200 min-h-screen">
+  <div class="hero-content flex-col lg:flex-row-reverse">
+    <div class="text-center lg:text-left">
+
+      
+      <h1 class="text-5xl font-bold text-warning">Login now!</h1>
+      <p class="py-6 text-lg">
+        Join us today and experience seamless convenience. Get exclusive access to our services and stay ahead with real-time updates. Don't miss out—sign up now!
+      </p>
+    </div>
+    <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+      <div class="flex w-full h-20 my-5 justify-center">
+        <img src="{% static 'images/Queue22.png' %}" class="h-full" alt="">
+
       </div>
-      <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-        <form class="card-body" action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Username</span>
-            </label>
-            {% render_field form.username class="input input-bordered" placeholder="username" %}
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Password</span>
-            </label>
-            {% render_field form.password class="input input-bordered" placeholder="password" %}
-            <label class="label">
-              <a href="{% url 'register' %}" class="label-text-alt link link-hover">Don't have an account? <span class="text-warning">Register now!</span></a>
-            </label>
-          </div>
-          <div class="text-sm text-red-500 pt-2">{{ form.non_field_errors  }}</div>
-          <div class="form-control mt-6">
-            <button type="submit" class="btn btn-warning">Login</button>
-          </div>
-        </form>
-      </div>
+      <form class="card-body pt-0" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Username</span>
+          </label>
+          {% render_field form.username class="input input-bordered" placeholder="username" %}
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          {% render_field form.password class="input input-bordered" placeholder="password" %}
+          <label class="label">
+            <a href="{% url 'register' %}" class="label-text-alt link link-hover">Don't have an account? <span
+                class="text-warning">Register now!</span></a>
+          </label>
+        </div>
+        <div class="text-sm text-red-500 pt-2">{{ form.non_field_errors }}</div>
+        <div class="form-control mt-6">
+          <button type="submit" class="btn btn-warning">Login</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 {% endblock content %}
-    

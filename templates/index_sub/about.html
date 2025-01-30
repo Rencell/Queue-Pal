@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block navs %}
+{% block nav %}
+<li><a href="{% url 'index' %}">Home</a></li>
+<li><a href="{% url 'about' %}" class="text-warning">About</a></li>
+{% endblock nav %}
+{% endblock navs %}
+
+
+{% block index_landing %}
+<div class="flex flex-col gap-16 pt-20">
+    <div class="flex w-full justify-center sm:p-0  p-4">
+    
+        <p class="py-6 w-96">
+            <span class="font-semibold text-warning">We are</span> Say goodbye to long waiting lines! Our advanced <span class="font-semibold text-warning">Real-Time Queue
+                Tracking system</span> minimizes wait times, reduces stress, and enhances efficiency. Save time and
+            enjoy a hassle-free experience like never before.
+        </p>
+        <div class="h-72">
+    
+            <img src="{% static 'images/illustration2.svg' %}" class="h-full" alt="">
+        </div>
+    </div>
+    
+    <div class="flex w-full justify-center sm:p-0  p-4">
+    
+        <div class="h-72">
+    
+            <img src="{% static 'images/illustration3.svg' %}" class="h-full" alt="">
+        </div>
+        <p class="py-6 w-96">
+            <span class="font-semibold text-warning">Our goal </span>Say goodbye to long waiting lines! Our advanced minimizes wait times, reduces stress, and enhances efficiency. Save time and
+            enjoy a hassle-free experience like never before.
+        </p>
+    </div>
+    <div class="flex w-full justify-center sm:p-0  p-4">
+    
+        <p class="py-6 w-96">
+            <span class="font-semibold text-warning">Without you </span>Say goodbye to long waiting lines! Our advanced minimizes wait times, reduces stress, and enhances efficiency. Save time and
+            enjoy a hassle-free experience like never before.
+        </p>
+        <div class="h-72">
+    
+            <img src="{% static 'images/illustration4.svg' %}" class="h-full" alt="">
+        </div>
+    </div>
+</div>
+{% endblock index_landing %}

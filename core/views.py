@@ -11,20 +11,6 @@ from core.models import Room, Status, UserRoom, Issue, RoomStatus
 class index(LoginRequiredMixin, TemplateView):
     template_name = "core/index.html"
     
-    # Status.objects.create(name="PENDING", description="default pending")
-    # Status.objects.create(name="SERVING", description="current serving")
-    # Status.objects.create(name="CANCELLED", description="ended session or cancelled")
-    # Status.objects.create(name="WAITING", description="being waited")
-    # Status.objects.create(name="NO_SHOW", description="did not show")
-    # Status.objects.create(name="PHYSICAL QUEUE", description="queue on physical")
-    
-    # RoomStatus.objects.create(name="ACTIVE")
-    # RoomStatus.objects.create(name="PAUSED")
-    # RoomStatus.objects.create(name="TERMINATED")
-    
-    
-
-  
     def post(self, request, *args, **kwargs):
         user_room = str(request.POST.get('user_room')).upper()
         
@@ -155,6 +141,11 @@ class queue_view(LoginRequiredMixin, ListView):
             query_set.status = CANCEL_STATUS
             query_set.save()
             del request.session['userroom'] 
+        elif 'back_home' in request.POST:
+            
+            del request.session['userroom'] 
+            return redirect(reverse_lazy('core_index'))
+
         
         return redirect(reverse_lazy('core_cancelled'))
     

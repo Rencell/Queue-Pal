@@ -29,7 +29,7 @@
                 localStorage.setItem('counter', this.counter);
               } else {
                 clearInterval(interval);
-                alert('Countdown completed!');
+                alert('Your allotted time with the staff has ended. Your session will now be marked as a no-show.');
                 localStorage.removeItem('counter')
               }
             }, 1000);

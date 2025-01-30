@@ -7,7 +7,7 @@ from django.db import migrations, models
 def add_status_data(apps, schema_editor):
     
     Group = apps.get_model('auth', 'group')
-    group_staff, created = Group.objects.get_or_create(name='staff')
+    group_staff, created = Group.objects.get_or_create(name='Staff')
     
     Status = apps.get_model('core', 'Status')
     RoomStatus = apps.get_model('core', 'RoomStatus')

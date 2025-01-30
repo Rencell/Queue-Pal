@@ -87,7 +87,7 @@
               localStorage.setItem('staff_timer', this.counter);
             } else {
               clearInterval(interval); // Stop the countdown at 0
-              alert('Countdown completed!');
+              alert('Timer has stopped');
               localStorage.removeItem('staff_timer')
               localStorage.removeItem('staff_open')
               this.open = false; 

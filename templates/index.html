@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="navbar bg-base-100">
+    <div class="navbar-start">
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                </svg>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                {% block navs %}
+                <li><a href="{% url 'index' %}" class="text-warning">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                {% endblock navs %}
+            </ul>
+        </div>
+        <a class="btn btn-ghost text-xl">
+            <img src="{% static 'images/Queue22.png' %}" class="h-full" alt="">
+            QueuePAL</a>
+    </div>
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+            {% block nav %}
+            <li><a href="{% url 'index' %}" class="text-warning">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            {% endblock nav %}
+        </ul>
+    </div>
+    <div class="navbar-end">
+
+        <a href="{% url 'login' %}" class="btn btn-warning btn-sm">Sign Up</a>
+    </div>
+</div>
+{% block index_landing %}
+<div class="hero bg-base-200 min-h-screen">
+    <div class="hero-content flex-col gap-20 lg:flex-row-reverse">
+        <img src="{% static 'images/illustration.svg' %}" class="max-w-sm rounded-lg" />
+        <div>
+            <h1 class="text-5xl font-bold w-96">Newly Real-time Queue!</h1>
+            <p class="py-6 w-96">
+                Say goodbye to long waiting lines! Our advanced <span class="font-semibold text-warning">Real-Time Queue
+                    Tracking system</span> minimizes wait times, reduces stress, and enhances efficiency. Save time and
+                enjoy a hassle-free experience like never before.
+            </p>
+
+            <a href="{% url 'login' %}" class="btn btn-warning">Proceed
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock index_landing %}
+{% endblock content %}
