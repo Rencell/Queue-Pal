@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+
+
+<div class="hero bg-base-200 min-h-screen">
+    <div class="hero-content flex-col lg:flex-row-reverse">
+      <div class="text-center lg:text-left">
+        <h1 class="text-5xl font-bold">Register now!</h1>
+        <p class="py-6">
+          Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+          quasi. In deleniti eaque aut repudiandae et a id nisi.
+        </p>
+      </div>
+      <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <form class="card-body" action="{% url 'register' %}" method="post">
+          {% csrf_token %}
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Username</span>
+            </label>
+
+            {% render_field form.username placeholder="username" class="input input-bordered"%}
+            <div class="text-sm text-red-500 pt-2">{{ form.username.errors }}</div>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Password</span>
+            </label>
+
+            {% render_field form.password1 placeholder="password" class="input input-bordered"%}
+            <div class="text-sm text-red-500 pt-2">{{ form.password1.errors }}</div>
+        </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Confirm Password</span>
+            </label>
+            {% render_field form.password2 placeholder="password" class="input input-bordered"%}
+            <div class="text-sm text-red-500 pt-2">{{ form.password2.errors }}</div>
+        </div>
+        <label class="label">
+          <a href="{% url 'login' %}" class="label-text-alt link link-hover">Already have an account? <span class="text-warning">Login now!</span></a>
+        </label>
+          <div class="form-control mt-6">
+            <button type="submit" class="btn btn-warning">Confirm</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

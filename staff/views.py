@@ -165,7 +165,7 @@ def htmxtry(request, userroom_id):
         userroom = UserRoom.objects.filter(id=userroom_id).first()
         
         if userroom:
-            userroom.status = Status.objects.get(id=13)
+            userroom.status = Status.objects.get(id=5)
             userroom.save()
             message_html = get_template('core/partials/countdown.html').render({})
             message_html = message_html.replace('\n', '').replace('\r', '')

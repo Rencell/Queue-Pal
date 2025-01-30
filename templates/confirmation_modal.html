@@ -1,0 +1,32 @@
+<script>
+  modal = document.getElementById("cancel_session_button")
+  modal.addEventListener('click', function(){
+  
+    let actionUrl = modal.getAttribute('data-action');
+    let buttonName = modal.getAttribute('data-button-name');
+    form = document.getElementById("form_modal");
+    form.setAttribute('action', actionUrl);
+
+    button = document.getElementById("button_modal");
+    button.setAttribute('name', buttonName);
+  })
+</script>
+
+<dialog id="my_modal_1" class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Are you sure?</h3>
+    <p class="py-4  text-center"><i class="bi bi-exclamation-circle text-8xl text-error"></i></p>
+    <p class="py-4  text-center">This will not be back, are you sure <br> you want to do this?</p>
+    <div class="modal-action">
+        <form id="form_modal" action="asdas" method="post">
+          {% csrf_token %}
+          <button id="button_modal" class="btn bg-red-700 text-white" name="asdas">Confirm</button>
+        </form>
+      <form method="dialog">
+        <button class="btn">No, let me back</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+

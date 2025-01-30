@@ -33,15 +33,9 @@ INSTALLED_APPS = [
     'core',
     'Accounts',
     'staff',
-    'widget_tweaks',
-    'webpush'
+    'widget_tweaks'
 ]
 
-WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": "BJ3XjrTQjVzDyFvhvG9Z-_uyEAejMa-zBC6Fx9dvrnzlntWWj1dgMk3XT2lUaKddwEO5ojmmCjf1HfOWKgSpYPE    ",
-    "VAPID_PRIVATE_KEY":"3GG6uNXAlZaW6rNd6fmiBMN7B6FmitxuREpG8Cyr_3A",
-    "VAPID_ADMIN_EMAIL": "admin@example.com"
-}
 
 
 MIDDLEWARE = [
@@ -71,7 +65,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
+    }
 ]
 
 # WSGI_APPLICATION = 'Queue_System.wsgi.application'
@@ -129,6 +123,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 import os
+
+
+ALLOWED_HOSTS = ['192.168.43.x', 'localhost', '127.0.0.1']
+
+
 STATIC_URL = 'static/'
 
 # STATIC_ROOT = BASE_DIR / 'static/'

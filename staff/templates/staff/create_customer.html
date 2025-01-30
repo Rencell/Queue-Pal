@@ -1,11 +1,30 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 
 {% block content %}
-    
-   <form action="{% url 'staff_create_customer' code=code %}" method="post">
+   <a href="javascript:history.back()" class="btn m-3 absolute">Back</a>
+   <form action="{% url 'staff_create_customer' code=code %}" method="post" class="h-dvh flex justify-center items-center flex-col">
         {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit">
+
+        
+        <label class="form-control w-full max-w-xs">
+           <div class="label">
+              <span class="label-text">What is username?</span>
+            </div>
+            {% render_field form.user class="input input-bordered w-full max-w-xs" %}
+       </label>
+        <label class="form-control w-full max-w-xs">
+           <div class="label">
+              <span class="label-text">Which room</span>
+            </div>
+            {% render_field form.room class="input input-bordered w-full max-w-xs" %}
+       </label>
+        <label class="form-control w-full max-w-xs">
+           <div class="label">
+              <span class="label-text">What is your status?</span>
+            </div>
+            {% render_field form.status class="input input-bordered w-full max-w-xs" %}
+       </label>
+      <input class="mt-3 btn btn-warning w-full max-w-xs" type="submit">
    </form>
 {% endblock content %}

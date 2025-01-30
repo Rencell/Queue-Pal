@@ -39,9 +39,9 @@ class Room(models.Model):
     current_serving_queue_number = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(RoomStatus, on_delete=models.CASCADE, default=1)
-    status_description = models.TextField()
-    status_time = models.CharField(max_length=50)
-    status_evaluated_time = models.CharField(max_length=50)
+    status_description = models.TextField(default=1)
+    status_time = models.CharField(max_length=50,default=1)
+    status_evaluated_time = models.CharField(max_length=50,default=1)
 
     class Meta:
         unique_together = ['staff', 'code']

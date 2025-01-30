@@ -16,7 +16,7 @@
     <div class="flex flex-col gap-2">
       
       <div class="flex gap-2">
-        <button class="btn" type="submit">Back</button>
+        <a href="javascript:history.back()" class="btn" type="submit">Back</a>
         <button class="btn grow" type="submit" onclick="my_modal_1.showModal()">Break</button>
         {% include 'staff/layout/break_modal.html' %}
         <form action="{% url 'staff_create_customer' code=Room.code %}">

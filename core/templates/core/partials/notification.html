@@ -1,5 +1,10 @@
-<div id='toast_alert' hx-swap-oob='true'>
 
+{% load static %}
+<div id='toast_alert' hx-swap-oob='true'>
+  <script>
+      const notificationIcon = '{% static "images/Creativity-bro.png" %}';
+  </script>
+  <script src='{% static "js/service-worker.js" %}'></script>
   <div class='toast toast-top toast-end'>
     <div class='alert alert-success'>
 
@@ -7,6 +12,7 @@
         counter</span>
     </div>
   </div>
+  
 </div>
 
 <div class='text-sm font-semibold text-warning' id='queue_turn'

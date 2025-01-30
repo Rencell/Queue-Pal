@@ -8,7 +8,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from braces.views import GroupRequiredMixin # type: ignore
 from django.urls import reverse_lazy
 from core.models import Room, Status, UserRoom, Issue, RoomStatus
-
 class index(LoginRequiredMixin, TemplateView):
     template_name = "core/index.html"
     
@@ -23,6 +22,9 @@ class index(LoginRequiredMixin, TemplateView):
     # RoomStatus.objects.create(name="PAUSED")
     # RoomStatus.objects.create(name="TERMINATED")
     
+    
+
+  
     def post(self, request, *args, **kwargs):
         user_room = str(request.POST.get('user_room')).upper()
         
@@ -44,7 +46,7 @@ class index(LoginRequiredMixin, TemplateView):
         today = date.today()
         
         try:
-            status = Status.objects.filter(id__in=[1,13])
+            status = Status.objects.filter(id__in=[1,5])
             isSession = UserRoom.objects.get(user=self.request.user, created_at__date=today, status__in=status)
             
             context['current_serving'] = isSession.room.current_serving_queue_number
@@ -163,5 +165,4 @@ class queue_error(LoginRequiredMixin, TemplateView):
 class closing_view(LoginRequiredMixin, TemplateView):
     template_name = "core/salutation.html"
     
-
 

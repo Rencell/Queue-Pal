@@ -16,6 +16,8 @@
                 badge-error
                 {% elif room.status.pk == 4 %}
                 badge-error
+                {% elif room.status.pk == 6 %}
+                badge-primary
                 {% endif %}
                 '>
                 <div class='font-semibold text-slate-800 text-xs lowercase'>{{ room.status }}</div>
